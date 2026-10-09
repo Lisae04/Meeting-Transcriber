@@ -1,0 +1,14 @@
+# Ignore everything by default -- this folder also holds real meeting recordings,
+# transcripts, and notes that must never be pushed to GitHub.
+*
+
+# ...except the actual tool files:
+!.gitignore
+!README.md
+!requirements.txt
+!setup.command
+!run.command
+!watch_meetings.command
+!transcribe_meeting.py
+!watch_meetings.py
+!.env.example
