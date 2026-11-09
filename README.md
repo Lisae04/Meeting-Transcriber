@@ -1,26 +1,31 @@
 # Meeting Transcriber
 
-A small app that takes a meeting recording (mp3, m4a, wav, ...) — or, optionally, listens
-to a live meeting itself — and produces:
+**Turn a meeting recording into a transcript, detailed notes and a one-page summary of decisions and action items, with the audio never leaving your laptop.**
 
-1. **A full transcript** — `{filename}_transcript.txt`, with timestamps.
-2. **Detailed meeting notes** — `{filename}_meeting_notes.md`, organized by topic, with
-   more detail than the summary below — closer to full minutes.
-3. **A concise summary** — `{filename}_summary.md`, with sections for Overview, Key
-   Discussion Points, Decisions Made, Action Items (table with Owner / Task / Due Date),
-   and Open Questions / Follow-ups.
+## Why I built this
 
-All three files are saved right next to the original recording.
+I was spending hours after client calls rewriting my notes into decisions and to-dos, and missing things in the process.
+I wanted a tool that would:
 
-Transcription runs **entirely on your Mac** using a local speech-to-text model
-(faster-whisper) — no internet needed for that step, and your audio never
-leaves your computer. The notes/summary step calls an LLM API (Claude by
-default) so the transcript *text* is sent to Anthropic (or OpenAI, if you
-choose that instead) for that one step — you'll need an API key for it.
+- keep the audio private (transcription runs locally with faster-whisper)
+- pull out **decisions, action items (owner / task / due date) and open questions**, not just a wall of text
+- refuse to make things up: if a name or date wasn't said clearly, the summary says "not specified"
+- show what each run costs (token usage and estimated $ are printed every time)
 
-There are two ways to use it:
-- **Drag in a recording you already have** (a Zoom cloud recording, a voice memo, etc.) — see "Processing a recording you already have."
-- **Have it listen to a live meeting and record automatically** — see "Live meeting recording," including the one-time audio setup it needs.
+## How it works
+
+```
+recording (.mp3/.m4a/.wav) ──► faster-whisper (local) ──► timestamped transcript
+                                                     └──► LLM (Claude or OpenAI) ──► meeting notes + summary
+```
+
+Optional: `watch_meetings.py` detects a Zoom, Teams, FaceTime or Google Meet call, **asks before recording**, and runs the pipeline when the call ends.
+
+## What I'd add next
+
+- Speaker labels (who said what)
+- Push action items straight into Jira or Notion
+- A small evaluation set: compare the summary against hand-written notes for a few test meetings
 
 ## One-time setup
 
@@ -137,8 +142,7 @@ by accident.
 In Canada, it's generally legal to record a call as long as one participant
 (you) consents — but many workplaces and clients still expect you to tell
 other attendees a meeting is being recorded, especially for client work.
-Worth a quick check with your internship supervisor on Biomet's policy for
-recording client calls.
+Check your organization's policy before recording client calls.
 
 ## Notes on quality / speed
 
